@@ -1,0 +1,208 @@
+/* ATHLETIQ — legal/marketing static site.
+   Colors match the real app's design system (Closure Doc section 11) —
+   not invented for this site. Dark palette (Auth-flow look) for the
+   landing page, light palette (in-app default) for policy/pricing pages,
+   same split logic the app itself uses. */
+
+:root {
+  --gold: #B8941F;
+  --gold-light: #D4AF37;
+  --gold-dark: #8C6D14;
+  --silver: #C0C0C0;
+  --error: #D64545;
+
+  /* light (policy/pricing pages) */
+  --light-bg: #FAFAFA;
+  --light-surface: #FFFFFF;
+  --light-text: #1A1A1A;
+  --light-text-secondary: #6B6B6B;
+  --light-border: #E0E0E0;
+
+  /* dark (homepage, Auth-flow look) */
+  --dark-bg: #0D0D0D;
+  --dark-surface: #1A1A1A;
+  --dark-text: #FFFFFF;
+  --dark-text-secondary: #B3B3B3;
+  --dark-border: #2E2E2E;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  line-height: 1.6;
+}
+
+body.light {
+  background: var(--light-bg);
+  color: var(--light-text);
+}
+
+body.dark {
+  background: var(--dark-bg);
+  color: var(--dark-text);
+}
+
+a { color: var(--gold); text-decoration: none; }
+a:hover { color: var(--gold-light); text-decoration: underline; }
+
+.wrap {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+header.site-header {
+  padding: 24px 0;
+  border-bottom: 1px solid var(--light-border);
+}
+
+body.dark header.site-header { border-bottom-color: var(--dark-border); }
+
+.site-header .wrap {
+  max-width: 900px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.logo {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  color: inherit;
+}
+
+.logo .dot { color: var(--gold); }
+
+nav.site-nav a {
+  margin-inline-start: 20px;
+  font-size: 14px;
+  font-weight: 600;
+  color: inherit;
+  opacity: 0.85;
+}
+
+nav.site-nav a:hover { opacity: 1; color: var(--gold); }
+
+main { padding: 48px 0 80px; }
+
+.hero {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 80px 20px 64px;
+  text-align: center;
+}
+
+.hero h1 {
+  font-size: 40px;
+  margin: 0 0 12px;
+}
+
+.hero .tagline {
+  font-size: 18px;
+  color: var(--dark-text-secondary);
+  max-width: 520px;
+  margin: 0 auto 32px;
+}
+
+.btn {
+  display: inline-block;
+  background: var(--gold);
+  color: var(--dark-bg);
+  font-weight: 700;
+  padding: 12px 28px;
+  border-radius: 8px;
+  text-decoration: none;
+}
+
+.btn:hover { background: var(--gold-light); color: var(--dark-bg); text-decoration: none; }
+
+.link-row {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-top: 40px;
+}
+
+.link-row a { font-size: 15px; font-weight: 600; }
+
+h1, h2, h3 { font-weight: 700; }
+
+.page-title {
+  font-size: 30px;
+  margin-bottom: 4px;
+}
+
+.updated {
+  color: var(--light-text-secondary);
+  font-size: 14px;
+  margin-bottom: 32px;
+}
+
+section.legal-section { margin-bottom: 28px; }
+
+section.legal-section h2 {
+  font-size: 18px;
+  border-bottom: 1px solid var(--light-border);
+  padding-bottom: 8px;
+  margin-bottom: 10px;
+}
+
+ul { padding-inline-start: 22px; }
+li { margin-bottom: 6px; }
+
+table.pricing {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 24px 0 8px;
+}
+
+table.pricing th, table.pricing td {
+  text-align: start;
+  padding: 14px 12px;
+  border-bottom: 1px solid var(--light-border);
+}
+
+table.pricing th { font-size: 13px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--light-text-secondary); }
+
+table.pricing td.price { font-weight: 700; color: var(--gold-dark); white-space: nowrap; }
+
+.note-box {
+  background: var(--light-surface);
+  border: 1px solid var(--light-border);
+  border-radius: 10px;
+  padding: 16px 18px;
+  font-size: 14px;
+  color: var(--light-text-secondary);
+  margin-top: 24px;
+}
+
+footer.site-footer {
+  border-top: 1px solid var(--light-border);
+  padding: 28px 0;
+  font-size: 13px;
+  color: var(--light-text-secondary);
+  text-align: center;
+}
+
+body.dark footer.site-footer {
+  border-top-color: var(--dark-border);
+  color: var(--dark-text-secondary);
+}
+
+footer.site-footer a { margin: 0 8px; }
+
+.contact-line {
+  font-size: 15px;
+  margin-top: 8px;
+}
+
+@media (max-width: 600px) {
+  .hero h1 { font-size: 30px; }
+  nav.site-nav a { margin-inline-start: 12px; font-size: 13px; }
+}
