@@ -121,6 +121,20 @@ main { padding: 48px 0 80px; }
 
 .btn:hover { background: var(--gold-light); color: var(--dark-bg); text-decoration: none; }
 
+button.btn {
+  border: none;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+button.btn:disabled { opacity: 0.6; cursor: default; }
+
+.checkout-account {
+  color: var(--light-text-secondary);
+  font-size: 14px;
+}
+
 .link-row {
   display: flex;
   justify-content: center;

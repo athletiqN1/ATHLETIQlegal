@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Subscribe — ATHLETIQ</title>
+<link rel="stylesheet" href="style.css">
+<!--
+  Opened from the app's payment screen as
+    checkout.html?role=<AppRole.name>&uid=<Firebase uid>&email=<email>
+  The uid is passed to Paddle as customData.firebaseUid, which Paddle
+  copies onto the subscription — functions/src/index.ts's paddleWebhook
+  reads it from there to find users/{uid}. Without a uid, the webhook
+  can't attribute the payment to anyone, so this page refuses to open
+  checkout rather than take a payment it can't deliver.
+
+  Provisioning happens ONLY in the webhook. The "payment received" state
+  below is UX, not proof of payment — the app waits for the Firestore
+  update, not for this page.
+-->
+</head>
+<body class="light">
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="logo" href="index.html" style="color:inherit;">ATHLETIQ<span class="dot">.</span></a>
+    <nav class="site-nav">
+      <a href="pricing.html">Pricing</a>
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="terms.html">Terms of Service</a>
+      <a href="refund.html">Refund Policy</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <h1 class="page-title">Subscribe</h1>
+
+    <section id="state-invalid" hidden>
+      <p>This checkout link is incomplete. Subscriptions are started from the ATHLETIQ app: sign in, choose your role, and tap the link on the payment screen. It brings you back here with your account attached.</p>
+      <p>See <a href="pricing.html">Pricing</a> for plans, or contact <a href="mailto:athletiq.support@gmail.com">athletiq.support@gmail.com</a>.</p>
+    </section>
+
+    <section id="state-ready" hidden>
+      <p class="updated">Billed monthly in USD. Cancel anytime, effective at the end of the current billing period.</p>
+      <table class="pricing">
+        <tbody>
+          <tr><td id="plan-label"></td><td class="price" id="plan-amount"></td></tr>
+        </tbody>
+      </table>
+      <p id="account-line" class="checkout-account"></p>
+      <button type="button" class="btn" id="subscribe-btn" disabled>Loading checkout…</button>
+      <div class="note-box">
+        By subscribing you agree to our <a href="terms.html">Terms of Service</a> and <a href="refund.html">Refund Policy</a>. Payments are processed by Paddle, our authorized reseller. Taxes may apply depending on your location.
+      </div>
+    </section>
+
+    <section id="state-done" hidden>
+      <p><strong>Payment received — thank you.</strong></p>
+      <p>Go back to the ATHLETIQ app. Your role unlocks automatically once we've confirmed the payment, usually within a few seconds. You'll also get a receipt from Paddle by email.</p>
+    </section>
+
+    <section id="state-error" hidden>
+      <p>Checkout couldn't be loaded. Please try again in a moment. If it keeps happening, contact <a href="mailto:athletiq.support@gmail.com">athletiq.support@gmail.com</a>.</p>
+    </section>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div>
+      <a href="pricing.html">Pricing</a>
+      <a href="privacy.html">Privacy</a>
+      <a href="terms.html">Terms</a>
+      <a href="refund.html">Refunds</a>
+    </div>
+    <div style="margin-top:10px;">&copy; 2026 ATHLETIQ. All rights reserved. Contact: <a href="mailto:athletiq.support@gmail.com">athletiq.support@gmail.com</a></div>
+  </div>
+</footer>
+
+<script src="paddle-config.js"></script>
+<script src="https://cdn.paddle.com/paddle/v2/paddle.js"></script>
+<script>
+(function () {
+  var config = window.ATHLETIQ_PADDLE;
+  var params = new URLSearchParams(window.location.search);
+  var role = params.get("role") || "";
+  var uid = params.get("uid") || "";
+  var email = params.get("email") || "";
+
+  function show(id) {
+    ["state-invalid", "state-ready", "state-done", "state-error"].forEach(function (s) {
+      document.getElementById(s).hidden = s !== id;
+    });
+  }
+
+  // Own-property check so ?role=toString etc. can't resolve to a
+  // prototype member. Firebase uids are opaque; this only rejects
+  // obviously malformed values, not a well-formed wrong uid.
+  var plan = Object.prototype.hasOwnProperty.call(config.prices, role) ? config.prices[role] : null;
+  if (!plan || !/^[A-Za-z0-9_-]{1,128}$/.test(uid)) {
+    show("state-invalid");
+    return;
+  }
+
+  document.getElementById("plan-label").textContent = plan.label;
+  document.getElementById("plan-amount").textContent = plan.amount;
+  document.getElementById("account-line").textContent = email
+    ? "Subscribing as " + email + "."
+    : "";
+  show("state-ready");
+
+  if (typeof Paddle === "undefined") {
+    show("state-error");
+    return;
+  }
+
+  if (config.environment === "sandbox") {
+    Paddle.Environment.set("sandbox");
+  }
+
+  Paddle.Initialize({
+    token: config.clientToken,
+    eventCallback: function (event) {
+      if (event.name === "checkout.completed") {
+        show("state-done");
+      } else if (event.name === "checkout.error") {
+        console.error("Paddle checkout error", event);
+        show("state-error");
+      }
+    },
+  });
+
+  var button = document.getElementById("subscribe-btn");
+  button.disabled = false;
+  button.textContent = "Continue to payment";
+  button.addEventListener("click", function () {
+    var options = {
+      items: [{ priceId: plan.priceId, quantity: 1 }],
+      customData: { firebaseUid: uid },
+      settings: { variant: "one-page", displayMode: "overlay", theme: "light" },
+    };
+    if (email) {
+      options.customer = { email: email };
+    }
+    Paddle.Checkout.open(options);
+  });
+})();
+</script>
+
+</body>
+</html>
