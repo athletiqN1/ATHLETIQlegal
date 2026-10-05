@@ -18,7 +18,7 @@ window.ATHLETIQ_PADDLE = {
     scout: { priceId: "pri_01m1rzmqjya52vzzzebgkq71gb", label: "Scout", amount: "$14.99 / month" },
     agent: { priceId: "pri_01m1rzmqz6ba5x5hp6r2c6fym2", label: "Agent", amount: "$19.99 / month" },
     observer: { priceId: "pri_01m1rzmrp3qzynzvad98kytkc5", label: "Observer", amount: "$6.99 / month" },
-    parent: { priceId: "pri_01m1rzms2ksz7kvdw2n1nh3f78", label: "Parent", amount: "$6.99 / month" },
+    parent: { priceId: "pri_01m1rzms2ksz7kvdw2n1nh3f78", label: "Parent", amount: "$4.99 / month" },
     team: { priceId: "pri_01m1rzmserjmv9jwrdfzxqnzvg", label: "Team (Club)", amount: "$14.99 / month" },
     advertiser: { priceId: "pri_01m1rzyn9ktrjs5zndtz7hhepn", label: "Advertiser", amount: "$19.99 / month" },
   },
