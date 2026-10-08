@@ -158,6 +158,16 @@ h1, h2, h3 { font-weight: 700; }
   margin-bottom: 32px;
 }
 
+.beta-notice {
+  border: 1px solid var(--gold);
+  background: rgba(184, 148, 31, 0.08);
+  color: var(--gold-dark);
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 14px;
+  margin: -16px 0 32px;
+}
+
 section.legal-section { margin-bottom: 28px; }
 
 section.legal-section h2 {
